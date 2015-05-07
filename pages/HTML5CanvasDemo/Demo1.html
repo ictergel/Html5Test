@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Canvas Hello World!</title>
+    <style type="text/css">
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        #canvas{
+             /*background-color: antiquewhite;*/
+         }
+        #canvas2{
+            /*background-color: antiquewhite;*/
+            width: 400px;
+            height: 300px;
+        }
+        img{
+            float: left;
+            margin-right: 8px;;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: none;" onended="playNext();">
+        <audio id="audio" src="../../raw/爱一直存在.mp3" controls="controls">浏览器不支持</audio>
+    </div>
+    <div>
+        <canvas id="canvas" width="400" height="300"></canvas>
+        <canvas id="canvas2"></canvas>
+        <canvas id="canvas3" width="400" height="300"></canvas>
+    </div>
+    <div>
+        <canvas id="canvas4" width="400" height="300"></canvas>
+        <canvas id="canvas5" width="400" height="300"></canvas>
+        <canvas id="canvas6" width="400" height="300"></canvas>
+    </div>
+    <div>
+        <img src="" id="canvasToImage" width="400px;" height="300px;"/>
+        <img src="" id="canvasToImage2" width="400px;" height="300px;"/>
+    </div>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var canvas2 = document.getElementById("canvas2");
+        var context2 = canvas2.getContext("2d");
+        var canvas3 = document.getElementById("canvas3");
+        var context3 = canvas3.getContext("2d");
+        var canvasToImage = document.getElementById("canvasToImage");
+        var canvasToImage2 = document.getElementById("canvasToImage2");
+        function drawHelloWordText(){
+            context.fillStyle = "antiquewhite";
+            context.fillRect(0,0,canvas.width,canvas.height);
+            context.font = "38px Arial"
+            context.fillStyle = "aqua";
+            context.strokeStyle = "blue";
+            context.fillText("Hello World!",canvas.width/2-150,canvas.height/2);
+            context.strokeText("Hello World!",canvas.width/2-150,canvas.height/2);
+            context.fill();
+            context.stroke();
+            canvasToImage.src = canvas.toDataURL(1);
+
+            context2.fillStyle = "antiquewhite";
+            context2.fillRect(0,0,canvas2.width,canvas2.height);
+            context2.font = "38px Arial"
+            context2.fillStyle = "aqua";
+            context2.strokeStyle = "blue";
+            context2.fillText("Hello World!",canvas2.width/2-150,canvas2.height/2);
+            context2.strokeText("Hello World!",canvas2.width/2-150,canvas2.height/2);
+            context2.fill();
+            context2.stroke();
+            canvasToImage2.src = canvas2.toDataURL(1);
+        }
+        function drawLine(){
+            context3.lineWidth = 10;
+            context3.strokeStyle = "aqua";
+            context3.beginPath();
+            context3.lineCap = "round";
+            context3.moveTo(20,100);
+            context3.lineTo(100,100);
+            context3.stroke();
+
+            context3.save();
+            context3.lineWidth = 15;
+            context3.strokeStyle = "blue";
+            context3.beginPath();
+            context3.lineCap = "butt";
+            context3.moveTo(150,100);
+            context3.lineTo(250,100);
+            context3.stroke();
+
+            context3.save();
+            context3.lineWidth = 20;
+            context3.strokeStyle = "green";
+            context3.beginPath();
+            context3.lineCap = "square";
+            context3.moveTo(300,100);
+            context3.lineTo(350,100);
+            context3.stroke();
+
+            context3.save();
+            context3.lineWidth = 5;
+            context3.strokeStyle = "red";
+            context3.beginPath();
+            context3.lineJoin = "bevel";
+            context3.moveTo(20,150);
+            context3.lineTo(100,200);
+            context3.moveTo(20,250);
+            context3.lineTo(100,200);
+            context3.stroke();
+
+            context3.restore();
+            context3.beginPath();
+            context3.lineJoin = "round";
+            context3.moveTo(120,150);
+            context3.lineTo(200,200);
+            context3.moveTo(120,250);
+            context3.lineTo(200,200);
+            context3.stroke();
+//
+            context3.restore();
+            context3.beginPath();
+            context3.lineJoin = "miter";
+            context3.moveTo(220,150);
+            context3.lineTo(300,200);
+            context3.moveTo(220,250);
+            context3.lineTo(300,200);
+            context3.stroke();
+
+            context3.restore();
+            context3.beginPath();
+            context3.lineJoin = "miter";
+            context3.moveTo(320,150);
+            context3.lineTo(400,200);
+            context3.moveTo(320,250);
+            context3.lineTo(400,200);
+            context3.stroke();
+
+        }
+        function drawHeart(){
+                var canvas4 = document.getElementById("canvas4");
+                if(canvas4==null)
+                    return false;
+                var ctx4=canvas4.getContext('2d');
+                ctx4.beginPath();
+                ctx4.moveTo(75,40);
+                ctx4.bezierCurveTo(75,37,70,25,50,25);
+                ctx4.bezierCurveTo(20,25,22,62.5,22,55);
+                ctx4.bezierCurveTo(20,80,40,102,75,120);
+                ctx4.bezierCurveTo(110,102,130,80,128,55);
+                ctx4.bezierCurveTo(128,55,130,25,100,25);
+                ctx4.bezierCurveTo(85,25,75,37,75,40);
+                var gradient=ctx4.createRadialGradient(0,0,0,0,0,150);
+                gradient.addColorStop(0,"rgba(244,28,285,0.5)");
+                gradient.addColorStop(1,"rgba(255,255,255,1)");
+                ctx4.fillStyle=gradient;
+                ctx4.fill();
+        }
+
+        function playMP3(){
+            var audio = document.getElementById("audio");
+            audio.play();
+        }
+        function playNext(){
+            var audio = document.getElementById("audio");
+            audio.src = "../../raw/爱一直存在.mp3" ;
+            audio.play();
+        }
+        drawHelloWordText();
+        drawLine();
+        drawHeart();
+        playMP3();
+    </script>
+</body>
+</html>

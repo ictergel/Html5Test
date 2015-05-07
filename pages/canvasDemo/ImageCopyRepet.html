@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>放大选择的canvas对象</title>
+    <style type="text/css">
+        body{
+            background-color: antiquewhite;
+        }
+        #radio{
+            padding: 10px;;
+        }
+    </style>
+</head>
+<body>
+    <div id='radio'>
+        <input type='radio' name="repetRadio" id='repetRadio'value='repetRadio'>repetRadio</input>
+        <input type='radio' name="repetRadio" id='repetXRadio'value='repetXRadio'>repetXRadio</input>
+        <input type='radio' name="repetRadio" id='repetYRadio'value='repetYRadio'>repetYRadio</input>
+        <input type='radio' name="repetRadio" id='noRepetRadio'value='noRepetRadio'>noRepetRadio</input>
+    </div>
+    <canvas id='canvas' width='1000'height='500'>
+        Canvas not supported
+    </canvas>
+    <script>
+        var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                repeatRadio = document.getElementById('repetRadio'),
+                repeatXRadio = document.getElementById('repetXRadio'),
+                repeatYRadio = document.getElementById('repetYRadio'),
+                noRepeatRadio = document.getElementById('noRepetRadio'),
+                image = new Image();
+        // Functions..........................................................
+        function fillCanvasWithPattern(repeatString){
+            var pattern = context.createPattern(image,repeatString);
+            context.clearRect(0, 0, canvas.width,canvas.height);
+            context.fillStyle = pattern;
+            context.fillRect(0, 0, canvas.width,canvas.height);
+            context.fill();
+        }
+        repeatRadio.onclick = function (e) {
+            fillCanvasWithPattern('repeat');
+        };
+        repeatXRadio.onclick = function (e) {
+            fillCanvasWithPattern('repeat-x');
+        };
+        repeatYRadio.onclick = function (e) {
+            fillCanvasWithPattern('repeat-y');
+        };
+        noRepeatRadio.onclick = function (e) {
+            fillCanvasWithPattern('no-repeat');
+        };
+        // Initialization.....................................................
+        image.src = '../../images/img/1.jpg';
+        image.onload = function (e) {
+            fillCanvasWithPattern('repeat');
+        };
+        //Initialization.....................................................
+    </script>
+</body>
+</html>

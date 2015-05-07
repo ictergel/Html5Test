@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        #menu ul{
+            list-style-type: none;  margin: 0px;  padding: 0px;  width: 80px;
+        }
+        #menu ul li{
+            border: 1px solid blanchedalmond; height: 24px; float:left; position:relative;
+        }
+        #menu ul li a,#menu ul li a:visited{
+            text-decoration: none;  display:block; color: aliceblue; text-align: center; background-color: burlywood;
+            padding: 5px; width: 100px;
+        }
+        #menu ul li ul{
+            display: none;
+        }
+        #menu ul li:hover a{
+            color:#fff;   background-color: chartreuse;   border-right-color: chartreuse;
+        }
+        #menu ul li:hover ul{
+            display: block;  position: absolute; left: 100%;  top: 0px;  width: 100px;  background-color: chartreuse;
+        }
+        #menu ul li:hover ul li a{
+            width: 100px; background-color: chartreuse; display:block;
+        }
+        #menu ul li:hover ul li a:hover{
+          background-color: antiquewhite;
+        }
+
+
+
+        #menu1 ul{
+            list-style-type: none;  margin: 0px;  padding: 0px;  width: 80px;  display: inline;
+        }
+        #menu1 ul li{
+            border: 1px solid blanchedalmond; height: 24px; float:left; position:relative;
+        }
+        #menu1 ul li a,#menu1 ul li a:visited{
+            text-decoration: none;  display:block; color: aliceblue; text-align: center; background-color: burlywood;
+            padding: 5px; width: 100px;
+        }
+        #menu1 ul li ul{
+            display: none;
+        }
+        #menu1 > ul li:hover a{
+            background:chartreuse url("../../images/hover.png") bottom repeat-x;
+        }
+        #menu1 ul li:hover a{
+            color:#fff;   background-color: chartreuse;   border-right-color: chartreuse;
+        }
+        #menu1 ul li:hover ul{
+            display: block;  position: absolute; left: 0;  top: 115%;  width: 100px;  background-color: chartreuse;
+        }
+        #menu1 ul li:hover ul li a{
+            width: 100px; background-color: chartreuse; display:block;
+        }
+        #menu1 ul li:hover ul li a:hover{
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu1">
+        <ul>
+            <li>
+                <a href="#">导航1</a>
+                <ul>
+                    <li><a href="#">导航11</a></li>
+                    <li><a href="#">导航12</a></li>
+                    <li><a href="#">导航13</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">导航2</a>
+                <ul>
+                    <li><a href="#">导航21</a></li>
+                    <li><a href="#">导航22</a></li>
+                    <li><a href="#">导航23</a></li>
+                </ul>
+            </li>
+            <li><a href="#">导航3</a></li>
+            <li><a href="#">导航4</a></li>
+            <li><a href="#">导航5</a></li>
+        </ul>
+    </div>
+    <div style="height: 200px;"></div>
+    <div id="menu">
+        <ul>
+            <li>
+                <a href="#">导航1</a>
+                <ul>
+                    <li><a href="#">导航11</a></li>
+                    <li><a href="#">导航12</a></li>
+                    <li><a href="#">导航13</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">导航2</a>
+                <ul>
+                    <li><a href="#">导航21</a></li>
+                    <li><a href="#">导航22</a></li>
+                    <li><a href="#">导航23</a></li>
+                </ul>
+            </li>
+            <li><a href="#">导航3</a></li>
+            <li><a href="#">导航4</a></li>
+            <li><a href="#">导航5</a></li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Balls Move</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: white;
+        }
+        #canvasZone {
+            width: 80%;
+            text-align: center;
+            background-color: aliceblue;
+            margin: 10px auto;
+        }
+        #myCanvas {
+            display: block;
+            /*background-color:aqua;*/
+        }
+        #btnDiv{
+            position: absolute;
+            left: 150px;
+            top: 50px;
+        }
+        #btn{
+            border-radius: 5px;
+            background-color: aqua;
+            width: 100px;
+            opacity: 0.5;
+        }
+    </style>
+    <script type="text/javascript">
+        var moveFlag = true;
+        var balls = [];
+        var canvas;
+        var ctx;
+        window.onload = function(){
+            canvas = document.getElementById("myCanvas");
+            ctx = canvas.getContext("2d");
+            intiBalls();
+        }
+        function btnClick(){
+            moveFlag = !moveFlag;
+            if(moveFlag){
+                document.getElementById("btn").value = "STOP";
+                drawBalls();
+                interval = setInterval(drawBalls,50);
+            }else{
+                document.getElementById("btn").value = "START";
+                clearInterval(interval);
+            }
+        }
+        function Balls(x,y,radius,r,g,b,xFlag,yFlag){
+            this.x = x;
+            this.y = y ;
+            this.radius = radius;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.xFlag = xFlag;
+            this.yFlag = yFlag;
+        }
+        Balls.prototype = {
+            drawBall: function () {
+                ctx.beginPath();
+                ctx.fillStyle = "rgb(" + this.r+ "," + this.g + "," + this.b + ")";
+                ctx.arc(this.x,this.y,this.radius,0,2*Math.PI,true);
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+        function intiBalls(){
+            for(var i=0;i<100;i++){
+                var r = Math.floor(Math.random()*255);
+                var g = Math.floor(Math.random()*255);
+                var b = Math.floor(Math.random()*255);
+                var x = Math.floor(Math.random()*canvas.width);
+                var y = Math.floor(Math.random()*canvas.height);
+                var radius = Math.floor(Math.random()*100);
+                balls.push(new Balls(x,y,radius,r,g,b,true,true));
+            }
+        }
+        function drawBalls(){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            drawGrid('lightgray', 10, 10);
+            balls.forEach(function(ball){
+                if(ball.xFlag){
+                    ball.x = ball.x +  Math.floor(Math.random()*5);
+                    console.log(" ball.x :" +  ball.x + ";canvas.width - ball.radius:"  + (canvas.width - ball.radius));
+                    if(ball.x > canvas.width - ball.radius){
+                        ball.xFlag = false;
+                    }
+                }else{
+                    ball.x = ball.x -  Math.floor(Math.random()*5);
+                    console.log(" ball.x :" +  ball.x + ";ball.radius"  + ball.radius);
+                    if(ball.x <  ball.radius){
+                        ball.xFlag = true;
+                    }
+                }
+                if(ball.yFlag){
+                    ball.y = ball.y + Math.floor(Math.random()*5);
+                    if(ball.y > canvas.height - ball.radius){
+                        ball.y = canvas.height - ball.radius - 2;
+                        ball.yFlag = false;
+                    }
+                }else{
+                    ball.y = ball.y - Math.floor(Math.random()*5);
+                    if(ball.y < ball.radius){
+                        ball.y = ball.radius;
+                        ball.yFlag = true;
+                    }
+                }
+
+
+                ball.drawBall();
+            });
+        }
+        // Functions..........................................................
+        function drawGrid(color, stepx, stepy) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 0.5;
+            for (var i = stepx + 0.5; i <ctx.canvas.width; i += stepx) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, ctx.canvas.height);
+                ctx.stroke();
+            }
+            for (var i = stepy + 0.5; i <ctx.canvas.height; i += stepy) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(ctx.canvas.width, i);
+                ctx.stroke();
+            }
+        }
+        var interval = setInterval(drawBalls,50);
+
+    </script>
+</head>
+<body>
+<div id="canvasZone">
+    <canvas id="myCanvas" width="1200" height="600"></canvas>
+</div>
+<div id="btnDiv">
+    <input type="button" id="btn" value="STOP" onclick="btnClick();">
+</div>
+</body>
+</html> 

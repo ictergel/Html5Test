@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../js/jquery-2.1.3.js"></script>
+    <style type="text/css">
+
+
+    </style>
+</head>
+<body>
+    <input id="btn" type="button" onclick="playPauseClick()" value="播放"/>
+    <audio id="audio" src="../raw/爱一直存在.mp3" controls="controls">浏览器不支持</audio>
+    <script>
+        function playPauseClick(){
+            var a= document.getElementById("audio");
+            if(a.paused){
+                a.play();
+                document.getElementById("btn").value = "暂停";
+            }else{
+                a.pause();
+                document.getElementById("btn").value = "播放";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+.colorful {
+    background: -webkit-linear-gradient(45deg, hsla(34, 94%, 49%, 1) 0%, hsla(34, 94%, 49%, 0) 70%),
+    -webkit-linear-gradient(315deg, hsla(10, 98%, 49%, 1) 10%, hsla(10, 98%, 49%, 0) 80%),
+    -webkit-linear-gradient(225deg, hsla(274, 98%, 47%, 1) 10%, hsla(274, 98%, 47%, 0) 80%),
+    -webkit-linear-gradient(135deg, hsla(164, 96%, 44%, 1) 100%, hsla(164, 96%, 44%, 0) 70%);
+    background: linear-gradient(45deg, hsla(34, 94%, 49%, 1) 0%, hsla(34, 94%, 49%, 0) 70%),
+    linear-gradient(135deg, hsla(10, 98%, 49%, 1) 10%, hsla(10, 98%, 49%, 0) 80%),
+    linear-gradient(225deg, hsla(274, 98%, 47%, 1) 10%, hsla(274, 98%, 47%, 0) 80%),
+    linear-gradient(315deg, hsla(164, 96%, 44%, 1) 100%, hsla(164, 96%, 44%, 0) 70%);
+    background-repeat: no-repeat;
+}
+
+li strong {
+    color: antiquewhite;
+    background-color: blue;
+}
+
+li {
+    margin: 5px;
+}
+
+strong {
+    color: blueviolet;
+}
+
+#divid a {
+    text-decoration: none;
+}
+
+#outClass {
+    width: 200px;
+    outline: dotted aqua;
+}

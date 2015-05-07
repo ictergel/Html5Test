@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        div{
+            width: 50px;
+            height: 50px;
+            background-color: aqua;
+            margin-bottom: 10px;
+        }
+        #div2{
+            position: relative;
+            animation: anim 2s infinite alternate; /*infinite alternate 无限循环*/
+            -webkit-animation: anim 2s infinite alternate; /*infinite alternate 无限循环*/
+        }
+        @keyframes anim {
+            0%{background-color: #000000;left: 125px;top: 175px;}
+            10%{background-color: #110000;left: 225px;top: 175px;}
+            20%{background-color: #220000;left: 255px;top: 85px;}
+            30%{background-color: #330000;left: 285px;top: 175px;}
+            40%{background-color: #440000;left: 385px;top: 175px;}
+            50%{background-color: #550000;left: 310px;top: 232px;}
+            60%{background-color: #660000;left: 344px;top: 323px;}
+            70%{background-color: #770000;left: 261px;top: 268px;}
+            80%{background-color: #880000;left: 180px;top: 323px;}
+            90%{background-color: #990000;left: 208px;top: 232px;}
+            100%{background-color: #aa0000;left: 125px;top: 175px;}
+        }
+        @-webkit-keyframes anim {
+            0%{background-color: #000000;left: 125px;top: 175px;}
+            10%{background-color: #110000;left: 225px;top: 175px;}
+            20%{background-color: #220000;left: 255px;top: 85px;}
+            30%{background-color: #330000;left: 285px;top: 175px;}
+            40%{background-color: #440000;left: 385px;top: 175px;}
+            50%{background-color: #550000;left: 310px;top: 232px;}
+            60%{background-color: #660000;left: 344px;top: 323px;}
+            70%{background-color: #770000;left: 261px;top: 268px;}
+            80%{background-color: #880000;left: 180px;top: 323px;}
+            90%{background-color: #990000;left: 208px;top: 232px;}
+            100%{background-color: #aa0000;left: 125px;top: 175px;}
+         }
+    </style>
+</head>
+<body>
+     <div id="div2"></div>
+
+</body>
+</html>

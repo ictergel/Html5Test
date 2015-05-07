@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Canvas里面嵌入HTML元素</title>
+    <style type="text/css">
+        body{
+            background-color: antiquewhite;
+        }
+        #canvas{
+            margin: 10px 0px 0px 10px;
+            border: 1px solid aqua;
+            background-color: white;
+        }
+        #glasspane{
+            position: absolute;
+            left: 50px;
+            top: 50px;
+            padding: 0 20px 10px 10px;
+            background-color: lightblue;
+            border: thin solid rgba(0,0,0,0.6);
+            color: #eeeeee;
+            font-family: Droid Sans, Arial,Helvetica, sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            -webkit-box-shadow: rgba(0,0,0,0.5) 5px 5px 20px;
+            -moz-box-shadow: rgba(0,0,0,0.5) 5px 5px 20px;
+            box-shadow: rgba(0,0,0,0.5) 5px 5px 20px;
+            opacity: 0.5;;
+        }
+        #glasspane h2 {
+            font-weight: normal;
+        }
+        #glasspane .title {
+            font-size: 2em;
+            color: rgba(255, 255, 0, 0.8);
+        }
+        #glasspane a:hover {
+            color: yellow;
+        }
+        #glasspane a {
+            text-decoration: none;
+            color: #cccccc;
+            font-size: 3.5em;
+        }
+        #glasspane p{
+            margin: 10px;
+            color: rgba(65, 65, 220, 1.0) ;
+            font-size: 12pt;
+            font-family: Palatino, Arial,Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="glasspane">
+        <h2 class="title">Bouncing Balls</h2>
+        <p>One Hundred Balls bouncing</p>
+        <a id="startButton">Start</a>
+    </div>
+    <div>
+        <canvas id="canvas" width="1000" height="500"></canvas>
+    </div>
+    <script>
+        var context =document.getElementById('canvas').getContext('2d'),
+                startButton =document.getElementById('startButton'),
+                glasspane =document.getElementById('glasspane'),
+                paused = false;
+        startButton.onclick = function(e) {
+            e.preventDefault();
+            paused = ! paused;
+            startButton.innerHTML = paused ? 'Start' :'Stop';
+            if(paused){
+                window.clearInterval(interval);
+            }else{
+                interval = setInterval(drawBall,200);
+            }
+        };
+        glasspane.onmousedown = function(e) {
+            e.preventDefault();
+        };
+        var i = 0;
+        function drawBall(){
+            i++;
+            if(i>10000){
+                window.clearInterval(interval);
+            }else{
+                var canvas = document.getElementById("canvas");
+                var content = canvas.getContext("2d");
+                var r = Math.floor(Math.random()*255);
+                var g = Math.floor(Math.random()*255);
+                var b = Math.floor(Math.random()*255);
+                var radius = Math.floor((Math.random()*150));
+                var x = Math.floor(Math.random()*1000);
+                var y = Math.floor(Math.random()*500);
+                content.beginPath();
+                content.fillStyle =  'rgb(' + r + ',' + g +  ',' + b + ')';
+                content.arc(x,y,radius,0,Math.PI*2,true);
+                content.fill();
+            }
+        }
+        var interval = setInterval(drawBall,200);
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>拖放</title>
+    <script type="text/javascript" src="../js/jquery-2.1.3.js"></script>
+    <style>
+        .box{
+            width: 300px;
+            height: 300px;
+        }
+        #box2{
+            background-color: aliceblue;
+            float: left;
+        }
+        #box1{
+            background-color: aquamarine;
+            float: left;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+    <script>
+        jQuery.fn.dragstart = function(handler) {
+            return this.each(function() {
+                this.addEventListener("dragstart", handler, false);
+            });
+        };
+
+        jQuery.fn.drag = function(handler) {
+            return this.each(function() {
+                this.addEventListener("drag", handler, false);
+            });
+        };
+
+        jQuery.fn.dragenter = function(handler) {
+            return this.each(function() {
+                this.addEventListener("dragenter", handler, false);
+            });
+        };
+
+        jQuery.fn.dragover = function(handler) {
+            return this.each(function() {
+                this.addEventListener("dragover", handler, false);
+            });
+        };
+
+        jQuery.fn.dragleave = function(handler) {
+            return this.each(function() {
+                this.addEventListener("dragleave", handler, false);
+            });
+        };
+
+        jQuery.fn.drop = function(handler) {
+            var handler1 = function(event) {
+                handler(event);
+                event.preventDefault();
+                event.stopPropagation();
+            };
+            return this.each(function() {
+                this.addEventListener("drop", handler, false);
+            });
+        };
+
+        jQuery.fn.dragend = function(handler) {
+            var handler1 = function(event) {
+                handler(event);
+                event.preventDefault();
+            };
+            return this.each(function() {
+                this.addEventListener("dragend", handler, false);
+            });
+        };
+
+        var box1Div;
+        var msgDiv;
+        var img1;
+        var box2Div;
+//        window.onload = function(){
+//            box1Div = document.getElementById("box1");
+//            box2Div = document.getElementById("box2");
+//            msgDiv = document.getElementById("msg");
+//            img1 = document.getElementById("img1");
+//            box1Div.ondragenter = function(e){
+////                showObj(e);
+//            }
+//
+//            box1Div.ondragover = function(e){
+//                e.preventDefault(); //阻止系统默认事件
+//            }
+//            box2Div.ondragover = function(e){
+//                e.preventDefault();
+//            }
+//            box1Div.ondrop = dropImgHandle;
+//            box2Div.ondrop = dropImgHandle;
+//            img1.ondragstart = function(e){
+//                e.dataTransfer.setData("imgId","img1");
+//            }
+//
+//        }
+//
+//        function dropImgHandle(e){
+//            e.preventDefault();
+//            var img = document.getElementById(e.dataTransfer.getData("imgId"));
+//            e.target.appendChild(img);
+//        }
+
+        $(function() {
+            $(document).dragover(function(event) {
+                event.preventDefault();
+            });
+
+            $("#img1").dragstart(function(event) {
+                var dt = event.dataTransfer;
+                dt.setData("imgId",this.id);
+            });
+
+            $(".box").dragend(function(event) {}).drop(function(event) {
+                $(this).append($('#' + event.dataTransfer.getData("imgId")));
+                e.preventDefault();
+
+             /*   var newElem = document.getElementById("img1").cloneNode(false);
+                event.target.appendChild(newElem);
+                event.preventDefault();*/ //设置复制
+
+            }).dragover(function(event){
+                var dt = event.dataTransfer;
+                event.preventDefault();
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>简单拖放示例</h1>
+    <div id="box1" class="box"></div>
+    <div id="box2" class="box"></div>
+    <img id="img1" src="../images/img/1.jpg"/>
+    <div id="msg"></div>
+</body>
+</html>

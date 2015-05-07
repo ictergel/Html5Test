@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Example</title>
+    <style>
+        body > * {
+            float: left;
+        }
+        #target {
+            border: medium double black;
+            margin: 4px;
+            height: 500px;
+            width: 1000px;
+            text-align: center;
+            display: table;
+        }
+        #target > p {
+            display: table-cell;
+            vertical-align: middle;
+            width: 100%;
+            height: 100px;
+            background-color: bisque;
+        }
+        table {
+            margin: 4px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 4px;
+        }
+        #showDiv {
+            width: 100%;
+            height: 400px;
+            background-color: aquamarine;
+        }
+        #imgContainer {
+            background-color: aqua;
+            height: 500px;
+            width: 1000px;
+        }
+    </style>
+</head>
+<body>
+<div id="target">
+    <p id="msg"> Drop Files Here</p>
+</div>
+<div id="showDiv" draggable="true"></div>
+<table id="data" border="1"></table>
+
+<div id="imgContainer"></div>
+<div id="msgDiv"></div>
+<script>
+    var imgContainer = document.getElementById("imgContainer");
+    var msgDiv = document.getElementById("msgDiv");
+
+    window.onload = function () {
+        imgContainer.ondragover = function (e) {
+            e.preventDefault();
+        }
+        imgContainer.ondrop = function (e) {
+            e.preventDefault();
+            var files = e.dataTransfer.files;
+            for (var i = 0; i < files.length; i++) {
+                var fileReader = new FileReader();
+                fileReader.onload = function (e) {
+                    showObje(e.target);
+                    imgContainer.innerHTML += "<img src=\"" + fileReader.result + "\" />";
+                }
+                fileReader.readAsDataURL(files[i]);
+            }
+        }
+
+        target.ondrop = function (e) {
+            e.preventDefault();
+            var files = e.dataTransfer.files;
+            var tableElem = document.getElementById("data");
+            tableElem.innerHTML = "<tr><th>Name</th><th>Type</th><th>Size</th></tr>";
+            for (var i = 0; i < files.length; i++) {
+                var row = "<tr><td>" + files[i].name + "</td><td>" + files[i].type + "</td><td>" + files[i].size + "</td></tr>";
+                tableElem.innerHTML += row;
+                if (files[i].type.indexOf("image") > -1) {
+                    var fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        var showDiv = document.getElementById("showDiv");
+//                    $('#showDiv').append($("<img src=\"" + fileReader.result + "\" />"));
+                        showDiv.innerHTML += "<img src=\"" + fileReader.result + "\" />";
+                    }
+                    fileReader.readAsDataURL(files[i]);
+                }
+            }
+        }
+    }
+
+    function showObje(obj) {
+        var str = "";
+        for (var i in obj) {
+            str += i + ":" + obj[i] + "<br/>";
+        }
+        msgDiv.innerHTML = str;
+    }
+    var target = document.getElementById("target");
+    target.ondragenter = handleDrag;
+    target.ondragover = handleDrag;
+    function handleDrag(e) {
+        e.preventDefault();
+    }
+
+
+
+</script>
+</body>
+</html> 

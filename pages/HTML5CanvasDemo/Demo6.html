@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Balls Move</title>
+    <style type="text/css">
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        #div {
+            margin: 0 auto;
+        }
+
+        canvas {
+            background-color: antiquewhite;
+        }
+        #divInit{
+            opacity: 0.6;
+            left: 10px;
+            top: 10px;
+            display: none;
+        }
+        img{
+            opacity: 0.8;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="divInit">
+  <img id="img" src="../../images/img/1.jpg" >
+</div>
+<div id="div">
+    <canvas id="canvas" width="800" height="600"></canvas>
+</div>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var img = document.getElementById("img");
+    var drag = false;
+    var sourceLog,endLog;
+    var imageData ;
+
+    function getLocation(mouseX,mouseY){
+        var box = canvas.getBoundingClientRect();
+        return {x:mouseX - box.left + 1,y:mouseY - box.top + 1};
+    }
+    window.onload = function(){
+        ctx.globalAlpha = 1;
+        ctx.drawImage(img,0,0,250,400,0,0,canvas.width,canvas.height);
+        ctx.save();
+        ctx.globalAlpha = 0.8;
+        ctx.drawImage(img,10,10);
+        ctx.restore();
+        canvas.onmousedown = function(e){
+            e.preventDefault(); // Prevent cursor change
+            drag = true;
+            sourceLog = getLocation(e.clientX, e.clientY);
+            imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+        }
+        canvas.onmouseup = function(e){
+            e.preventDefault(); // Prevent cursor change
+            if(endLog.x- sourceLog.x > 10 && endLog.y - sourceLog.y>10 ){
+                if(drag){
+                    ctx.putImageData(imageData,0,0);
+                    ctx.drawImage(img,sourceLog.x-10,sourceLog.y-10,endLog.x- sourceLog.x,endLog.y - sourceLog.y,0,0,canvas.width,canvas.height);
+                    ctx.save();
+                    ctx.globalAlpha = 0.8;
+                    ctx.drawImage(img,10,10);
+                    ctx.restore();
+                };
+            }
+            drag =false;
+
+        }
+        canvas.onmousemove = function(e){
+            e.preventDefault(); // Prevent cursor change
+            endLog = getLocation(e.clientX, e.clientY);
+            if(drag && endLog.x <img.width + 10 && endLog.x >10 && endLog.y>10 && endLog.y<img.height+10){
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.putImageData(imageData,0,0);
+                ctx.save();
+                ctx.beginPath();
+                ctx.strokeStyle = "aqua";
+                ctx.rect(sourceLog.x,sourceLog.y,endLog.x- sourceLog.x,endLog.y - sourceLog.y);
+                ctx.stroke();
+                ctx.closePath();
+                ctx.restore();
+            }
+             if( endLog.x >img.width + 10){
+                 endLog.x = img.width + 10;
+             }
+            if( endLog.y > img.height+10){
+                endLog.y = img.height+10
+            }
+
+        }
+    }
+
+
+</script>
+</body>
+</html>

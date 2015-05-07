@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Balls Move</title>
+    <style type="text/css">
+        #div{
+            width: 80%;
+            margin: 0 auto;
+        }
+        canvas{
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+<div id="div">
+    <canvas id="canvas" width="1200" height="600"></canvas>
+</div>
+<script>
+    var width = document.body.clientWidth;
+    var height = document.body.clientHeight;
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var balls = [];
+    var radius = 20;
+    var redAngle = Math.PI/4*7, yellowAngle =  Math.PI/4,blueAngle =  Math.PI/4;
+    var redInterval;
+    var yellowInterval;
+    var blueInterval;
+    var oneColor = "rgba(255,0,0,0.4)",twoColor = "rgba(0,255,0,0.6)",threeColor = "rgba(0,0,255,0.8)";
+
+    function Ball(x,y,fillColor,radius){
+        this.x = x;
+        this.y = y;
+        this.fillColor = fillColor;
+        this.radius = radius;
+    }
+    Ball.prototype = {
+        drawBall:function(){
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle = "#9A9C6D";
+            ctx.lineWidth = 0.5;
+            ctx.arc(this.x,this.y,this.radius,0,2*Math.PI,true);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = this.fillColor;
+            ctx.arc(this.x,this.y,this.radius,0,2*Math.PI,true);
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+        }
+    }
+    function initBalls(){
+        canvas.width = width*0.8;
+
+        balls.push(new Ball(canvas.width/2-60,radius,oneColor,radius));
+        balls.push(new Ball(canvas.width/2,canvas.height/2,twoColor,radius));
+        balls.push(new Ball(radius,canvas.height/2,threeColor,radius));
+        ctx.fillStyle = "aqua";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        redInterval = setInterval(moveRedBall,1);
+        yellowInterval = setInterval(moveYellowBall,20);
+        blueInterval = setInterval(moveBlueBall,30);
+    }
+    function drawBalls(){
+//        ctx.clearRect(0,0,canvas.width,canvas.height);
+        balls.forEach(function(ball){
+            ball.drawBall();
+        });
+    }
+
+    function moveRedBall(){
+        balls.forEach(function(ball){
+            if(ball.fillColor == oneColor){
+                var sinX = 1*Math.sin(redAngle);
+                var cosY = 1*Math.cos(redAngle);
+                var x = ball.x + 10*Math.sin(redAngle);
+                var y = ball.y + 10*Math.cos(redAngle);
+                while(x<radius || x + radius>canvas.width || y <radius || y + radius>canvas.height){
+                    redAngle += Math.PI/2;
+                    x = ball.x + 10*Math.sin(redAngle);
+                    y = ball.y + 10*Math.cos(redAngle);
+                }
+                if(( sinX.toFixed(6)*1 + Math.sin(redAngle).toFixed(6)*1== 0 ) && (cosY.toFixed(6)*1 + Math.cos(redAngle).toFixed(6)*1 == 0)){
+                    redAngle += Math.PI/2;
+                }
+                ball.x = ball.x + 10*Math.sin(redAngle);
+                ball.y = ball.y + 10*Math.cos(redAngle);
+            }
+        });
+        drawBalls();
+    }
+    function moveYellowBall(){
+        balls.forEach(function(ball){
+            if(ball.fillColor == twoColor){
+                var sinX = 1*Math.sin(yellowAngle);
+                var cosY = 1*Math.cos(yellowAngle);
+                var x = ball.x + 10*Math.sin(yellowAngle);
+                var y = ball.y + 10*Math.cos(yellowAngle);
+                while(x<radius || x + radius>canvas.width || y <radius || y + radius>canvas.height){
+                    yellowAngle += Math.PI/2;
+                    x = ball.x + 10*Math.sin(yellowAngle);
+                    y = ball.y + 10*Math.cos(yellowAngle);
+                    console.log();
+                }
+                if(( sinX.toFixed(6)*1 + Math.sin(yellowAngle).toFixed(6)*1== 0 ) && (cosY.toFixed(6)*1 + Math.cos(yellowAngle).toFixed(6)*1 == 0)){
+                    yellowAngle += Math.PI/2;
+                }
+                ball.x = ball.x + 10*Math.sin(yellowAngle);
+                ball.y = ball.y + 10*Math.cos(yellowAngle);
+            }
+        });
+        drawBalls();
+    }
+    function moveBlueBall(){
+        balls.forEach(function(ball){
+            if(ball.fillColor == threeColor){
+                var sinX = 1*Math.sin(blueAngle);
+                var cosY = 1*Math.cos(blueAngle);
+                var x = ball.x + 10*Math.sin(blueAngle);
+                var y = ball.y + 10*Math.cos(blueAngle);
+                while(x<radius || x + radius>canvas.width || y <radius || y + radius>canvas.height){
+                    blueAngle += Math.PI/2;
+                    x = ball.x + 10*Math.sin(blueAngle);
+                    y = ball.y + 10*Math.cos(blueAngle);
+                }
+                if(( sinX.toFixed(6)*1 + Math.sin(blueAngle).toFixed(6)*1== 0 ) && (cosY.toFixed(6)*1 + Math.cos(blueAngle).toFixed(6)*1 == 0)){
+                    blueAngle += Math.PI/2;
+                }
+                ball.x = ball.x + 10*Math.sin(blueAngle);
+                ball.y = ball.y + 10*Math.cos(blueAngle);
+            }
+        });
+        drawBalls();
+    }
+    initBalls();
+
+</script>
+</body>
+</html>

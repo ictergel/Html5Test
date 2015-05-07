@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+       #position1{
+           width: 200px;
+           height: 200px;
+           background-color: aquamarine;
+           left: 100px;
+           position: fixed;
+           z-index: 11;
+           box-shadow: 5px 5px 2px #ff00ff;
+       }
+        #position2{
+            width: 500px;
+            height: 100px;
+            background-color: antiquewhite;
+            left: 190px;
+            position: absolute;
+            z-index: 22;
+        }
+    </style>
+</head>
+<body>
+     <div id="position1"> </div>
+     <div id="position2"> </div>
+    <script>
+        for(var i=0;i<100;i++){
+            document.write(i+"<br/>");
+        }
+    </script>
+</body>
+</html>

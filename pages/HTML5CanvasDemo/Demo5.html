@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Balls Move</title>
+    <style type="text/css">
+        #div {
+            width: 99%;
+            margin: 0 auto;
+        }
+
+        canvas {
+            background-color: antiquewhite;
+        }
+        #divInit{
+            background-color: aqua;
+            opacity: 0.6;
+            padding: 10px;
+            position: absolute;
+            left: 50px;
+            top: 50px;
+        }
+        #divInit input{
+            width: 80px;
+        }
+        #divInit *{
+            margin:5px;
+        }
+    </style>
+</head>
+<body>
+<div id="divInit">
+    固定圆球的数量：<br/><input id="fixBallNum" value="6"> <br/>
+    下面将要移动的圆球的数量：<br/><input id="moveBallNum" value="18"> <br/>
+    <input id="btn" type="button" value="重新开始" onclick="initBalls();" />
+</div>
+<div id="div">
+    <canvas id="canvas" width="1000" height="600"></canvas>
+</div>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var fixBalls = [];   //固定点的数量
+    var moveToFixBalls = []; //移动点移动到固定位置的数量
+    var moveBalls = [];   //移动点的数量
+    var centerX = canvas.width/2 + 100;
+    var centerY = canvas.height/2-120;
+    var fixBallsNum = 7;
+    var moveBallNum =18;
+    var interval;
+
+    function Ball(x, y, fillColor, radius, orderNum, angle) {
+        this.x = x;
+        this.y = y;
+        this.fillColor = fillColor;
+        this.radius = radius;
+        this.orderNum = orderNum;
+        this.angle = angle;
+    }
+    Ball.prototype = {
+        drawBall: function () {
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = this.fillColor;
+            ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+        },
+        drawLine: function () {
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle = this.fillColor;
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(centerX, centerY);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        },
+        drawText: function () {
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            var mearWidth = ctx.measureText(this.orderNum).width
+            ctx.fillText(this.orderNum, this.x - mearWidth/2, this.y+2.5);
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+        }
+    }
+    function drawBalls() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawCenter();
+        fixBalls.forEach(function (ball) {
+            ball.drawBall();
+            ball.drawLine();
+        });
+        moveToFixBalls.forEach(function (ball) {
+            ball.drawBall();
+            ball.drawLine();
+            ball.drawText();
+        });
+        moveBalls.forEach(function (ball) {
+            ball.drawBall();
+            ball.drawText();
+        });
+    }
+
+    function drawCenter() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = "green";
+        ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI, true);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    }
+    var out_radius = 150;
+
+    function initInputValue(){
+        fixBallsNum =  window.sessionStorage.getItem("fixBallsNum");
+        if(fixBallsNum == null || fixBallsNum == undefined){
+            fixBallsNum = document.getElementById("fixBallNum").value||6;
+            window.sessionStorage.setItem("fixBallsNum",fixBallsNum);
+        }else{
+            document.getElementById("fixBallNum").value =  fixBallsNum;
+        }
+        moveBallNum =  window.sessionStorage.getItem("moveBallNum");
+        if(moveBallNum == null || moveBallNum == undefined){
+            moveBallNum = document.getElementById("moveBallNum").value||18;
+            window.sessionStorage.setItem("moveBallNum",moveBallNum);
+        }else{
+            document.getElementById("moveBallNum").value =  moveBallNum;
+        }
+    }
+    initInputValue();
+    function initBalls() {
+        moveBallNum = document.getElementById("moveBallNum").value||18;
+        fixBallsNum = document.getElementById("fixBallNum").value||6;
+        window.sessionStorage.setItem("moveBallNum",moveBallNum);
+        window.sessionStorage.setItem("fixBallsNum",fixBallsNum);
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        fixBalls = [];
+        moveBalls = [];
+        moveToFixBalls = [];
+
+        addFixBalls();
+        addMoveBalls();
+        drawBalls();
+        canvas.width = document.body.clientWidth;
+        canvas.height = document.body.clientHeight;
+        clearInterval(interval);
+        interval = setInterval(intervalStart, 20);
+        canvas.onmouseup = function (e) {
+            var shiftBall = moveBalls.shift();
+            moveBalls.forEach(function (ball) {
+                ball.y = ball.y - 50;
+            });
+            shiftBall.y = centerY + 150;
+
+            var flag = checkBouncing(shiftBall);
+            moveToFixBalls.push(shiftBall);
+            if (flag) {
+                clearInterval(interval);
+                drawBalls();
+                drawGameOverText();
+                canvas.onmouseup = function () {
+                };
+            }
+        }
+    }
+    function addFixBalls(){
+        for (var i = 0; i < fixBallsNum; ++i) {
+            fixBalls.push(new Ball(centerX + out_radius * Math.sin(2*Math.PI / fixBallsNum * i), centerY + out_radius * Math.cos(2*Math.PI / fixBallsNum * i), "green", 15, "",2*Math.PI / fixBallsNum * i));
+        }
+    }
+    function addMoveBalls() {
+        for (var i = 0; i < moveBallNum; ++i) {
+            moveBalls.push(new Ball(centerX, canvas.height / 2 + 100 + 50 * i, "green", 15, moveBallNum - i, 0));
+        }
+    }
+    initBalls();
+    var m = 0;
+    function intervalStart() {
+        for (var i = 0; i < fixBalls.length; i++) {
+            var ball = fixBalls[i];
+            ball.x = centerX + out_radius * Math.sin(Math.PI / 180 * m + ball.angle);
+            ball.y = centerY + out_radius * Math.cos(Math.PI / 180 * m + ball.angle);
+        }
+        for (var i = 0; i < moveToFixBalls.length; i++) {
+            var ball = moveToFixBalls[i];
+            ball.angle = Math.PI / 180 * m + ball.angle - Math.PI / 180 * (m - 1);
+            ball.x = centerX + out_radius * Math.sin(ball.angle);
+            ball.y = centerY + out_radius * Math.cos(ball.angle);
+        }
+        drawBalls();
+        m++;
+    }
+    function windowsToCanvas(canvas, x, y) {
+        var bbox = canvas.getBoundingClientRect();
+        return {x: x - bbox.left - 2.5, y: y - bbox.top - 2};
+    }
+
+    function drawGameOverText() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = "red";
+        ctx.font = "50px Arial";
+        var mearWidth = ctx.measureText("GameOver").width
+        ctx.fillText("GameOver", centerX - mearWidth / 2, canvas.height / 2);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    }
+    function checkBouncing(shiftBall) {
+        var flag = false;
+        fixBalls.forEach(function (ball) {
+            var squarX = Math.pow(shiftBall.x - ball.x,2);
+            var squarY = Math.pow(shiftBall.y - ball.y,2);
+            var squarZ = 30 * 30;
+            if (squarX + squarY <= squarZ) {
+                flag = true;
+            }
+        });
+        moveToFixBalls.forEach(function (ball) {
+            var squarX = Math.pow(shiftBall.x - ball.x,2);
+            var squarY = Math.pow(shiftBall.y - ball.y,2);
+            var squarZ = 30 * 30;
+            if (squarX + squarY <= squarZ) {
+                flag = true;
+            }
+        });
+        return flag;
+    }
+
+</script>
+</body>
+</html>

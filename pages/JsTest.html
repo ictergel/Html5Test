@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script type="text/javascript" src="../js/jquery-2.1.3.js"></script>
+
+</head>
+<body>
+    <script>
+      /*  var i = 16;
+        var j = 16;
+        document.write(i + j + "<br/>");
+        document.write(i - j + "<br/>");
+        document.write(i * j + "<br/>");
+        document.write(i / j + "<br/>");
+        document.write(i % j + "<br/>");*/
+    </script>
+    <div id="div">
+        <button id="btn">按钮</button>
+        <a id="aid" href="http://www.baidu.com">百度一下</a>
+    </div>
+    <script>
+        document.getElementById("btn").addEventListener("click",showType);
+        document.getElementById("div").addEventListener("click",showDiv);
+        document.getElementById("aid").addEventListener("click",showAid);
+        function showType(e){
+            alert(e.target);
+            e.stopPropagation(); //阻止事件冒泡
+        }
+        function showDiv(){
+            alert("div");
+        }
+        function showAid(event){
+            event.stopPropagation();
+            event.preventDefault(); //阻止跳转事件
+        }
+    </script>
+
+
+
+    <div id="denglu" style="background-color: aquamarine; width: 400px;height: 100px;margin-bottom: 10px;"> </div>
+    <div id="denglu2" style="background-color: aquamarine; width: 400px;height: 100px;"> </div>
+    <div id="arrDiv"></div>
+    <script>
+
+        function startTime(){
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            $('#denglu').text(h + ":" + checkTime(m) + ":" + checkTime(s));
+            var t = setTimeout(function(){
+                startTime();
+            },500);
+        }
+
+        var timeInterval = setInterval(function(){
+            getTimeStr();
+        },1000);
+        function getTimeStr(){
+            var date = new Date();
+            var dateStr = date.toLocaleTimeString();
+            $('#denglu2').text(dateStr);
+        }
+        startTime();
+        function checkTime(i){
+            if(i<10){
+                i = "0" + i;
+            }
+            return i;
+        }
+
+        var a = [3,2,1,5,6,4,8];
+        $('#arrDiv').append(a.sort(function(a,b){
+            return a-b;
+        }) + "<br/>");
+        $('#arrDiv').append(a.sort(function(a,b){
+            return b-a;
+        })+ "<br/>");
+    </script>
+</body>
+</html>

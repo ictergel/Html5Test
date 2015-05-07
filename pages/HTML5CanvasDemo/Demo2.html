@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Canvas Draw A clock!</title>
+    <style type="text/css">
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        #canvas{
+             background-color: antiquewhite;
+         }
+        #div{
+            width: 80%;
+            margin: 0px auto;
+            background-color: antiquewhite;
+        }
+
+    </style>
+</head>
+<body>
+    <div>
+        <audio id="audio" src="../../raw/爱一直存在.mp3" controls="controls">浏览器不支持</audio>
+    </div>
+    <div id="div">
+        <canvas id="canvas" width="1000" height="600"></canvas>
+    </div>
+
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        canvas.width = document.body.clientWidth*0.8;
+        var context = canvas.getContext("2d");
+        var radius = 100;
+        var handRadius = radius + 10;
+        var ourArcRadius = handRadius + 10;
+        var box = canvas.getBoundingClientRect();
+        var log = getLocation(box.left + canvas.width/2,box.top + canvas.height/2);
+        var drawingSurfaceImageData;
+        var clocks = [];
+
+        function getLocation(mouseX,mouseY){
+            var box = canvas.getBoundingClientRect();
+            return {x:mouseX - box.left + 1,y:mouseY - box.top + 1};
+        }
+
+//        function saveDrawingSurface() {
+//            drawingSurfaceImageData =context.getImageData(0, 0,
+//                    canvas.width,
+//                    canvas.height);
+//        }
+//        function restoreDrawingSurface() {
+//            context.putImageData(drawingSurfaceImageData,0, 0);
+//        }
+//        function updateRubberband(loc) {
+//            drawClock();
+//        }
+
+        function Clock(centerX,centerY){
+            this.x = centerX;
+            this.y = centerY ;
+        }
+        Clock.prototype = {
+            drawClockCanvas: function () {
+                var centerX = this.x,centerY = this.y;
+                drawClockCircle(centerX,centerY);
+                drawClockCenter(centerX,centerY);
+                drawClockPoint(centerX,centerY);
+                drawHands(centerX,centerY);
+                drawNumberLabel(centerX,centerY);
+            }
+        };
+
+        function drawClock(){
+            context.clearRect(0,0,canvas.width,canvas.height);
+            var centerX = log.x,centerY = log.y;
+            drawClockCircle(centerX,centerY);
+            drawClockCenter(centerX,centerY);
+            drawClockPoint(centerX,centerY);
+            drawHands(centerX,centerY);
+            drawNumberLabel(centerX,centerY);
+        }
+
+        function drawClocks(){
+            context.clearRect(0,0,canvas.width,canvas.height);
+            drawGrid('lightgray', 10, 10);
+            clocks.forEach(function(clock){
+                clock.drawClockCanvas();
+            })
+        }
+
+
+        function drawHands(centerX,centerY){
+            var date = new Date();
+            var h = date.getHours();
+            var m = date.getMinutes();
+            var s = date.getSeconds();
+            h = h>12?h-12:h;
+            drawHand((h+m/60)*5*2*Math.PI/60 - Math.PI/2,50,centerX,centerY);
+            drawHand(2*Math.PI/60*m - Math.PI/2,70,centerX,centerY);
+            drawHand(2*Math.PI/60*s - Math.PI/2,98,centerX,centerY);
+        }
+        function drawHand(angle,handLength,centerX,centerY){
+            context.save();
+            context.strokeStyle = "green";
+            context.beginPath();
+            context.moveTo(centerX,centerY);
+            context.lineTo(centerX + handLength*Math.cos(angle),centerY +  handLength*Math.sin(angle));
+            context.stroke();
+            context.restore();
+        }
+        function drawClockCircle(centerX,centerY){
+            context.save();
+            context.strokeStyle = "green";
+            context.beginPath();
+            context.arc(centerX,centerY,radius,0,2*Math.PI,true);
+            context.arc(centerX,centerY,ourArcRadius,0,2*Math.PI,true);
+            context.stroke();
+            context.restore();
+        }
+
+        function drawClockCenter(centerX,centerY){
+            context.beginPath();
+            context.arc(centerX,centerY,5,0,2*Math.PI,true);
+            context.fill();
+        }
+        function drawClockPoint(centerX,centerY){
+            for(var i=0;i<60;i++){
+                var angle = 2*Math.PI/60*i - Math.PI/2;
+                context.beginPath();
+                context.save();
+                context.fillStyle = "green";
+                if(i%5 == 0){
+                    context.arc(centerX + Math.cos(angle)*radius,centerY + Math.sin(angle)*radius,4,0,2*Math.PI,true);
+                }else{
+                    context.arc(centerX + Math.cos(angle)*radius,centerY + Math.sin(angle)*radius,2,0,2*Math.PI,true);
+                }
+
+                context.fill();
+                context.restore();
+            }
+
+        }
+
+        function drawNumberLabel(centerX,centerY){
+            var numberLabels = [12,1,2,3,4,5,6,7,8,9,10,11];
+            var angle = 0;
+            numberLabels.forEach(function(numberLabel){
+                angle = Math.PI/6*numberLabel - Math.PI/2;
+                var numeralWidth =context.measureText(numberLabel).width;
+                context.fillText(numberLabel,
+                        centerX  + handRadius*Math.cos(angle) - numeralWidth/2,
+                        centerY  + handRadius*Math.sin(angle) + 5);
+                context.fill();
+            })
+        }
+        function  checkCollision(log){
+            var flag = false;
+            clocks.forEach(function(clock){
+                var imSubX = clock.x - log.x;
+                var imSubY = clock.y - log.y;
+                if(imSubX*imSubX + imSubY*imSubY <4*ourArcRadius*ourArcRadius){
+                    flag = true;
+                }
+            })
+            console.log(flag);
+            return flag;
+        }
+        // Functions..........................................................
+        function drawGrid(color, stepx, stepy) {
+        context.strokeStyle = color;
+        context.lineWidth = 0.5;
+        for (var i = stepx + 0.5; i <context.canvas.width; i += stepx) {
+            context.beginPath();
+            context.moveTo(i, 0);
+            context.lineTo(i, context.canvas.height);
+            context.stroke();
+        }
+        for (var i = stepy + 0.5; i <context.canvas.height; i += stepy) {
+            context.beginPath();
+            context.moveTo(0, i);
+            context.lineTo(context.canvas.width, i);
+            context.stroke();
+        }
+        }
+        context.font = "15px Arial";
+        setInterval(drawClocks,1000);
+
+
+//        canvas.onmousemove = function(e){
+//            e.preventDefault(); // Prevent cursor change
+//            log = getLocation(e.clientX, e.clientY);
+//            drawClock();
+//        }
+        canvas.onmousedown = function(e){
+//            e.preventDefault(); // Prevent cursor change
+//            log = getLocation(e.clientX, e.clientY);
+//            clocks.push(new Clock(log.x,log.y));
+//            drawClocks();
+
+        }
+        canvas.onmouseup = function(e){
+            e.preventDefault(); // Prevent cursor change
+            log = getLocation(e.clientX, e.clientY);
+            if(!checkCollision(log)){
+                clocks.push(new Clock(log.x,log.y));
+                drawClocks();
+            }
+
+        }
+    </script>
+</body>
+</html>

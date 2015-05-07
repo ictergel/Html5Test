@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../js/jquery-2.1.3.js"></script>
+</head>
+<body>
+    <div id="divID" style="background-color: aquamarine; width: 400px;height: 100px;margin-bottom: 10px;"></div>
+<script>
+    function Person(name){
+        var _this = {};
+        _this._name = name;
+        _this.sayHello = function(){
+            $('#divID').append("<br/>Hello Person:" + _this._name);
+        }
+        return _this;
+    }
+    function Teacher(name){
+        var _this = Person(name);
+        var superSayHello = _this.sayHello;
+        _this.sayHello = function(){
+            superSayHello.call(_this);
+            $('#divID').append("<br/>Hello Teacher:" + _this._name);
+        }
+        return _this;
+    }
+    var t = new Teacher("Ictergel");
+    t.sayHello();
+
+
+    (function(){
+        var nameStr =  "kang";
+        function People(name){
+            this._name = name;
+        }
+        People.prototype.sayHello = function(){
+            $('#divID').append("<br/>Hello People:" + this._name + nameStr);
+        }
+        window.People = People;
+    }());
+    (function(){
+        function Student(name){
+            this._name = name;
+        }
+        Student.prototype = new People();
+        var superSay = Student.prototype.sayHello;
+        Student.prototype.sayHello = function(){
+            superSay.call(this);
+            $('#divID').append("<br/>Hello Student:" + this._name);
+        }
+        window.Student = Student;
+    }());
+
+    var s = new Student("Ict");
+    s.sayHello();
+
+
+</script>
+</body>
+</html>

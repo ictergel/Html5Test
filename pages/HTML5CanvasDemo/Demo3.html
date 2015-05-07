@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Draw Heart</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            margin: 0;
+        }
+        body {
+            background-color: white;
+        }
+        #canvasZone {
+            width: 80%;
+            text-align: center;
+            background-color: aliceblue;
+            margin: 0px auto;
+        }
+        #myCanvas {
+            display: block;
+            /*background-color:aqua;*/
+        }
+    </style>
+    <script type="text/javascript">
+        var arr = [];//保存所有的XY坐标，只为验证。实际程序中可删除。  
+        var r = 10;
+        var radian;//弧度  
+        var i;
+        var radianDecrement;//弧度增量  
+        var time = 1;//每个点之间的时间间隔
+        var intervalId;
+        var num = 720*2;//分割为 360 个点
+        var startRadian = Math.PI;
+        var ctx, canvas;
+        var intervalColor;
+        window.onload = function () {
+            startAnimation();
+        }
+        function startAnimation() {
+            canvas = document.getElementById("myCanvas");
+            ctx = document.getElementById("myCanvas").getContext("2d");
+            canvas.width = document.body.clientWidth * 0.8;
+            drawGrid('lightgray', 10, 10);
+            drawHeart();
+        }
+        function drawHeart() {
+            ctx.strokeStyle = "pink";
+            ctx.fillStyle = "pink";
+            ctx.lineWidth = 1;//设置线的宽度
+            radian = startRadian;//弧度设为初始弧度  
+            radianDecrement = Math.PI / num * 2;
+            ctx.moveTo(getX(radian), getY(radian));//移动到初始点
+            i = 0;
+            intervalId = setInterval("printHeart()", time);
+        }
+        //x = 16 sin^3 t, y = (13 cos t - 5 cos 2t - 2 cos 3t - cos 4t)  
+        function printHeart() {
+            radian += radianDecrement;
+//            ctx.lineTo(getX(radian), getY(radian));//在旧点和新点之间连线
+            ctx.arc(getX(radian), getY(radian), 1, 0, 2 * Math.PI, true);
+            //arr.push("X:" + getX(radian) + "<br/>Y:" + getY(radian) + "<br/>");
+            i++;
+            ctx.stroke();//画线
+//            ctx.fill();//画线
+            if (i >= num) {
+                ctx.fill();//画线
+                clearInterval(intervalId);
+                intervalColor = setInterval("changeHeartColor()", 500);
+//                drawLine();
+                //document.getElementById("bs").innerHTML = arr.join("");//打印所有的XY坐标点。  
+            }
+        }
+        function changeHeartColor(){
+            var gradial = ctx.createLinearGradient(canvas.width/2 - 160,canvas.height/2 - 150,canvas.width/2 + 160,canvas.height/2 + 150);
+            gradial.addColorStop(0, getRGBColor());
+            gradial.addColorStop(0.1, getRGBColor());
+            gradial.addColorStop(0.2, getRGBColor());
+            gradial.addColorStop(0.3, getRGBColor());
+            gradial.addColorStop(0.4, getRGBColor());
+            gradial.addColorStop(0.5, getRGBColor());
+            gradial.addColorStop(0.6, getRGBColor());
+            gradial.addColorStop(0.7, getRGBColor());
+            gradial.addColorStop(0.8, getRGBColor());
+            gradial.addColorStop(0.9, getRGBColor());
+            gradial.addColorStop(1, getRGBColor());
+            ctx.fillStyle = gradial;
+            ctx.fill();
+        }
+
+        function getRGBColor(){
+            var r=Math.floor(Math.random()*255);
+            var g=Math.floor(Math.random()*255);
+            var b=Math.floor(Math.random()*255);
+            return 'rgb(' + r + ',' + g +  ',' + b + ')';
+        };
+
+        function drawLine() {
+            ctx.save();
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.fillStyle = "red";
+            ctx.strokeStyle = "red";
+            ctx.arc(canvas.width / 2, canvas.height / 2, 5, 0, 2 * Math.PI, false);
+            ctx.moveTo(canvas.width / 2 - 300, canvas.height / 2 - 120);
+            ctx.lineTo(canvas.width / 2 + 300, canvas.height / 2 + 120);
+            ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        }
+        function getX(t) {//由弧度得到 X 坐标  
+            return canvas.width / 2 + r * (16 * Math.pow(Math.sin(t), 3));
+        }
+
+        function getY(t) {//由弧度得到 Y 坐标  
+            return canvas.height / 2 - r * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        }
+        // Functions..........................................................
+        function drawGrid(color, stepx, stepy) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 0.5;
+            for (var i = stepx + 0.5; i <ctx.canvas.width; i += stepx) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, ctx.canvas.height);
+                ctx.stroke();
+            }
+            for (var i = stepy + 0.5; i <ctx.canvas.height; i += stepy) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(ctx.canvas.width, i);
+                ctx.stroke();
+            }
+        }
+
+        var raws = ['ShiningFriends.mp3','一辈子的孤单.mp3','两个人不等于我们.mp3','何曼婷许嵩素颜.mp3','儿童歌曲虫儿飞.mp3','刘若英我不想念.mp3','卷珠帘.mp3','周传雄关不上的窗.mp3','周传雄寂寞沙洲冷.mp3','夏天alex不再联系.mp3','天黑黑.mp3','如果缘只到遇见.mp3','小酒窝.mp3','想起.mp3','愿得一人心(剧场版).mp3','我的未来式.mp3','时间煮雨.mp3','李倩一瞬间.mp3','杨丞琳左边.mp3','樱花草.mp3','水木年华一生有你.mp3','水木年华启程.mp3','爱一直存在.mp3','爱乐团死而无憾.mp3','约定.mp3','羽泉奔跑.mp3','老地方(国).mp3','至上励合棉花糖.mp3','致青春.mp3','蓝莲花.mp3','表达爱.mp3','越单纯越幸福.mp3','遇见.mp3','遗失的美好.mp3','那年夏天宁静的海.mp3','醉赤壁.mp3','金莎星月神话.mp3','陈小春独家记忆.mp3'];
+        function playNext(){
+            var audio = document.getElementById("audio");
+            var random = Math.floor(Math.random()*37);
+            audio.src = "../../raw/" + raws[random];
+            audio.play();
+            audio.onended = function(){
+                playNext();
+            };
+        }
+    </script>
+</head>
+<body>
+<div>
+    <audio id="audio" src="../../raw/ShiningFriends.mp3" controls="controls" onended="playNext();">浏览器不支持</audio>
+</div>
+<div id="canvasZone">
+    <canvas id="myCanvas" width="600" height="600"></canvas>
+</div>
+<div id="bs">
+</div>
+</body>
+</html> 
